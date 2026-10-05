@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -8,17 +8,22 @@ public class AuthorizeOperationFilter : IOperationFilter
 {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        var hasAuthorize = context.MethodInfo
-            .GetCustomAttributes(true)
-            .OfType<AuthorizeAttribute>()
-            .Any();
+        var methodAttributes = context.MethodInfo.GetCustomAttributes(true);
+        var controllerAttributes = context.MethodInfo.DeclaringType?.GetCustomAttributes(true) ?? [];
 
-        var hasAllowAnonymous = context.MethodInfo
-            .GetCustomAttributes(true)
-            .OfType<AllowAnonymousAttribute>()
-            .Any();
+        var hasMethodAllowAnonymous = methodAttributes.OfType<IAllowAnonymous>().Any();
+        if (hasMethodAllowAnonymous)
+        {
+            return;
+        }
 
-        if (hasAllowAnonymous || !hasAuthorize)
+        var hasMethodAuthorize = methodAttributes.OfType<IAuthorizeData>().Any();
+        var hasControllerAuthorize = controllerAttributes.OfType<IAuthorizeData>().Any();
+        var hasControllerAllowAnonymous = controllerAttributes.OfType<IAllowAnonymous>().Any();
+
+        var isAuthorized = hasMethodAuthorize || (hasControllerAuthorize && !hasControllerAllowAnonymous);
+
+        if (!isAuthorized)
         {
             return;
         }
@@ -28,7 +33,7 @@ public class AuthorizeOperationFilter : IOperationFilter
         operation.Security.Add(
             new OpenApiSecurityRequirement
             {
-                [new OpenApiSecuritySchemeReference("Bearer")] = []
+                [new OpenApiSecuritySchemeReference("Bearer", context.Document)] = []
             });
     }
 }
