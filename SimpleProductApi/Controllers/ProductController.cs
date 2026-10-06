@@ -20,7 +20,10 @@ namespace SimpleProductApi.Controllers
             _context = context;
         }
 
-
+        /// <summary>
+        /// Gets all products.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetProducts()
         {
@@ -29,6 +32,11 @@ namespace SimpleProductApi.Controllers
             return Ok(products);
         }
 
+        /// <summary>
+        /// Gets a product by ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
@@ -42,6 +50,11 @@ namespace SimpleProductApi.Controllers
             return Ok(product);
         }
 
+        /// <summary>
+        /// Creates a new product.
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct(Product product)
         {
@@ -52,8 +65,12 @@ namespace SimpleProductApi.Controllers
             return Ok(product);
         }
 
-
-
+        /// <summary>
+        /// Updates an existing product.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="product"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(int id, Product product)
         {
@@ -76,7 +93,11 @@ namespace SimpleProductApi.Controllers
 
             return Ok(existingProduct);
         }
-
+        /// <summary>
+        /// Deletes a product by ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {

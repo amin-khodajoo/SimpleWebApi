@@ -26,6 +26,11 @@ namespace SimpleProductApi.Controllers
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Registers a new user.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("signup")]
         public async Task<IActionResult> Signup(SignupRequest request)
         {
@@ -56,7 +61,11 @@ namespace SimpleProductApi.Controllers
             });
         }
 
-
+        /// <summary>
+        /// Signs in a user and returns a JWT token.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("signin")]
         public async Task<IActionResult> Signin(SigninRequest request)
         {

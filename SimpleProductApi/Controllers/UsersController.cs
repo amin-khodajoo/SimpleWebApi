@@ -18,6 +18,10 @@ public class UsersController : ControllerBase
         _context = context;
     }
 
+    /// <summary>
+    /// Gets the authenticated user's profile.
+    /// </summary>
+    /// <returns></returns>
     [HttpGet("me")]
     public async Task<IActionResult> GetMe()
     {
